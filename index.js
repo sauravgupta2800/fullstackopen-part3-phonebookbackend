@@ -4,6 +4,7 @@ const morgan = require("morgan");
 
 const app = express();
 const cors = require("cors");
+app.use(express.static("build"));
 app.use(cors());
 
 morgan.token("body", (req, res) => JSON.stringify(req.body));
@@ -23,9 +24,9 @@ let persons = [
   { id: 2, name: "ddd", number: 1322224 },
 ];
 
-app.get("/", (request, response) => {
-  response.send("<h1>Hello World123!</h1>");
-});
+// app.get("/", (request, response) => {
+//   response.send("<h1>Hello World123!</h1>");
+// });
 
 app.get("/api/persons", (request, response) => {
   response.send(persons);
