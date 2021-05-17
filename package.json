@@ -1,0 +1,19 @@
+{
+  "name": "phonebook-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sauravgupta2800/fullstackopen-part3-phonebookbackend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sauravgupta2800/fullstackopen-part3-phonebookbackend/issues"
+  },
+  "homepage": "https://github.com/sauravgupta2800/fullstackopen-part3-phonebookbackend#readme"
+}
