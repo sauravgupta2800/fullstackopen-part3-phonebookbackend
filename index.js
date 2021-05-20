@@ -22,8 +22,8 @@ const getRandomId = () => {
 };
 
 app.get("/api/persons", (request, response) => {
-  Person.find({}).then((personsRes) => {
-    response.send(personsRes);
+  Person.find({}).then((persons) => {
+    response.send(persons);
   });
 });
 
@@ -45,7 +45,7 @@ app.get("/api/info", (request, response) => {
   });
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   response.status(204).end();
   Person.findByIdAndRemove(request.params.id)
     .then(() => {
@@ -54,28 +54,24 @@ app.delete("/api/persons/:id", (request, response) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
   const { name = "", number = 0 } = request.body;
-  if (!name || !number) {
-    response.status(404).send({
-      error: "Name or / and number is missing",
-    });
-  }
   const person = new Person({ name, number });
-  person.save().then((savedPerson) => {
-    response.status(201).send(savedPerson);
-  });
+  person
+    .save()
+    .then((savedPerson) => {
+      response.status(201).send(savedPerson);
+    })
+    .catch((error) => next(error));
 });
 
-app.put("/api/persons/:id", (request, response) => {
+app.put("/api/persons/:id", (request, response, next) => {
   const { name = "", number = 0 } = request.body;
-  Person.findByIdAndUpdate(
-    request.params.id,
-    { name, number },
-    { new: true }
-  ).then((savedPerson) => {
-    response.status(201).send(savedPerson);
-  });
+  Person.findByIdAndUpdate(request.params.id, { name, number }, { new: true })
+    .then((savedPerson) => {
+      response.status(201).send(savedPerson);
+    })
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (request, response) => {
@@ -88,6 +84,8 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message);
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
   }
   next(error);
 };
