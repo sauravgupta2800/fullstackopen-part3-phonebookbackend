@@ -17,7 +17,6 @@ personRouter.get('/:id', (request, response, next) => {
 });
 
 personRouter.delete('/:id', (request, response, next) => {
-  response.status(204).end();
   Person.findByIdAndRemove(request.params.id)
     .then(() => {
       response.status(204).end();
